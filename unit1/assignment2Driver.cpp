@@ -11,6 +11,7 @@
 *         3) computer runtime to find the word terrorists, the, and freedom
 */
 
+#include <iostream>
 #include "BinaryHeap.h"
 #include "colorObj.cpp"
 
@@ -40,8 +41,10 @@ int main(){
   heap.insert(red   );  
   heap.insert(purple);  
   heap.insert(white );  
-  
-  colorObj temp = heap.findMin();
-  temp.print();
+  if( orange > blue ) {
+    std::cout << "Orange less than blue" << std::endl;
+  } else { std::cout << "Orange greater than blue"<<std::endl;}
+  //colorObj temp = heap.findMin();
+  //temp.print();
   return 0;
 }

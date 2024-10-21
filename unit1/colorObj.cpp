@@ -19,5 +19,8 @@ class colorObj{
     bool operator<(const colorObj& other ){
       return ( rank < other.rank );
     }
+    bool operator>(const colorObj& other ){
+      return ( rank > other.rank );
+    }
 };
 
