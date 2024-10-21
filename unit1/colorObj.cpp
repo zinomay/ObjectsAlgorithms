@@ -4,14 +4,20 @@
 *********************************************/
 
 #include <string>
+#include <iostream>
 
 class colorObj{
   private:
-    string color;
+    std::string color;
     int rank;
   public:
-    colorObj( string color, int rank ): color(color), rank(rank) {}
-    operator<(const colorObj& other ){
+    colorObj(){ color = ""; rank = 0; }
+    colorObj( std::string color, int rank ): color(color), rank(rank) {}
+    void print(){
+      std::cout << "color: " << color << "rank: "<< rank << std::endl;
+    }
+    bool operator<(const colorObj& other ){
       return ( rank < other.rank );
     }
-}
+};
+

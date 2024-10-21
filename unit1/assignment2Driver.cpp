@@ -12,25 +12,36 @@
 */
 
 #include "BinaryHeap.h"
-#include "colorObj.h"
+#include "colorObj.cpp"
 
 int main(){
 
  // Part A Create colors used for each data structure
-  colorObj orange; // 4
-  colorObj blue  ; // 7
-  colorObj pink  ; // 5
-  colorObj black ; // 6
-  colorObj green ; // 8
-  colorObj yellow; // 1
-  colorObj brown ; // 2
-  colorObj red   ; // 3
-  colorObj purple; // 10
-  colorObj white; // 9
+  colorObj orange = colorObj("orange",  4); // 4
+  colorObj blue   = colorObj("blue"  ,  7); // 7
+  colorObj pink   = colorObj("pink"  ,  5); // 5
+  colorObj black  = colorObj("black" ,  6); // 6
+  colorObj green  = colorObj("green" ,  8); // 8
+  colorObj yellow = colorObj("yellow",  1); // 1
+  colorObj brown  = colorObj("brown" ,  2); // 2
+  colorObj red    = colorObj("red"   ,  3); // 3
+  colorObj purple = colorObj("purple", 10); // 10
+  colorObj white  = colorObj("white" ,  9); // 9
 
   // 1) binary max heap using rank as priority
-  BinaryHeap heap;
-
-
+  BinaryHeap<colorObj> heap = BinaryHeap<colorObj>(100);
+  heap.insert(orange);  
+  heap.insert(blue  );  
+  heap.insert(pink  );  
+  heap.insert(black );  
+  heap.insert(green );  
+  heap.insert(yellow);  
+  heap.insert(brown );  
+  heap.insert(red   );  
+  heap.insert(purple);  
+  heap.insert(white );  
+  
+  colorObj temp = heap.findMin();
+  temp.print();
   return 0;
 }
