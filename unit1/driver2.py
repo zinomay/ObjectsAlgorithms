@@ -17,7 +17,9 @@ class Color:
 # Driver 
 if __name__ == "__main__":
    
-  # ----------------- Part A -----------------
+  ############################################################ 
+  #                   Part A                  
+  ############################################################ 
   colors = [
     ("orange",4), ("blue"   ,7), ("pink"  ,5), ("black" ,6), ("green" ,8), 
     ("yellow",1), ("brown" ,2), ("red"   ,3), ("purple" ,10), ("white" ,9)
@@ -42,7 +44,7 @@ if __name__ == "__main__":
   for color in colors:
     # Tuples, 0: color, 1: rank
     # Heap priority queue uses key for priority
-    heap.add(color[1],color[0] )
+    heap.add( color[1], color[0] )
    
   # Heap
   # 1) Search for rank 5
@@ -74,12 +76,17 @@ if __name__ == "__main__":
   print ("Search for white. Rank is ",binaryTree.find("white"))
   print ("Search for black. Rank is ",binaryTree.find("black"))
   print ("Search for violet. Rank is ",binaryTree.find("violet"))
+  ############################################################ 
+  #                   Part B                  
+  ############################################################ 
 
-  # ----------------- Part B -----------------
   with open('PatriotAct.txt') as iFile:
+    # read file lines from PatriotAct
     file_lines = iFile.readlines()
-    word_count = {}
+    word_count = {} # Dictionary for tracking word counts
+    # Clean text of puntuations
     for line in file_lines:
+
       line = line.replace(',','') 
       line = line.replace('-','') 
       line = line.replace("'s",'') 
@@ -92,8 +99,11 @@ if __name__ == "__main__":
           word_count[word] = word_count[word]+1
         else: 
           word_count[word] = 1 
-
+    
+    # Create heap 
     file_heap = HeapPriorityQueue() 
+
+    # Create hashtable
     file_table = ProbeHashMap()
     #for key,value in word_count.items():
     #    file_heap.add(value,key)
