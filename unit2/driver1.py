@@ -1,10 +1,29 @@
-# Author: Markus Bernal
-# Date: 10/23/2024
+#######################################################################
 # Unit 2 Assignment 2
 # Majority Element
+#
+# Author: Markus Bernal
+# Date: 10/23/2024
+# Description: Find the majority of an array using recursion. Analyze
+#              Big-Oh complexity of algorithm
+# Input: 
+# Output:
+# 
+#######################################################################
 
 def findMajority( arr ):
-    #
+    # #Purpose: Find majority in array with recursion
+    # Input:
+    # Output
+
+    for entry in array:
+
+      # Base condition
+      if():
+      else:
+        # exit condition
+        findMajority(entry)
+
 
 if __name__ == "__main__":
     print('Unit 2 Assignment 2: Majority Element')
