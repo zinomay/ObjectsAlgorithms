@@ -3,6 +3,8 @@
 
 #include "dsexceptions.h"
 #include <vector>
+#include <iostream>
+
 using namespace std;
 
 // BinaryHeap class
@@ -113,6 +115,13 @@ class BinaryHeap
     void makeEmpty( )
       { currentSize = 0; }
 
+    void print(){
+        for(int i=1; i<=currentSize; i++){
+            cout << array[i] << " ";
+        }
+        cout << endl;
+    }
+
   private:
     int                currentSize;  // Number of elements in heap
     vector<Comparable> array;        // The heap array
@@ -148,6 +157,8 @@ class BinaryHeap
         }
         array[ hole ] = std::move( tmp );
     }
+
+    
 };
 
 #endif

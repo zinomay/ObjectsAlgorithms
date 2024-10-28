@@ -11,7 +11,9 @@
 if __name__=="__main__":
     # Using two different approaches to build a heap
     # insert integers 1 to 5000 into a heap in the following orders:
-
+    # Integers
+    myInts = [2, 45, 12, 1, 56, 78, 13, 14, 5, 8, 9, 3, 11, 34]
     # 1. Sorted
+
     # 2. Reverse-sorted
     # 3. Random
