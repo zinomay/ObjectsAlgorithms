@@ -1,13 +1,23 @@
-#ifndef QUADRATIC_PROBING_H
-#define QUADRATIC_PROBING_H
+#ifndef LINEAR_PROBING_H
+#define LINEAR_PROBING_H
 
 #include <vector>
 #include <algorithm>
 #include <functional>
 #include <string>
 #include <iostream>
-#include "linearProbing.h"
-
+/*
+template<>
+class hash<unsigned long long int>
+{
+    public:
+        size_t operator()( const unsigned long long int & key ){
+            size_t hashVal = 0;
+            // h1(k) = k mod ( M ) 
+            hashVal = key;
+            return hashVal;
+        }
+};*/
 using namespace std;
 
 int nextPrime( int n );
@@ -25,10 +35,10 @@ int nextPrime( int n );
 
 
 template <typename HashedObj>
-class QuadraticHashTable
+class HashTable
 {
   public:
-    explicit QuadraticHashTable( int size = 101 ) : array( nextPrime( size ) )
+    explicit HashTable( int size = 101 ) : array( nextPrime( size ) )
       { makeEmpty( ); collisions = 0; }
 
     bool contains( const HashedObj & x ) const
@@ -98,7 +108,9 @@ class QuadraticHashTable
         return true;
     }
 
-    int getCollisions(){ return collisions; }
+    int getCollisions (){
+        return collisions;
+    }
 
     enum EntryType { ACTIVE, EMPTY, DELETED };
 
@@ -126,19 +138,12 @@ class QuadraticHashTable
     {
         int offset = 1;
         int currentPos = myhash( x );
-        // function: (h1(k) + i^2) mod M
-        //            Quadratic probing
-        // Input: 
-        // Output:
-        // Author: Markus Bernal
-        // Date: 10/28/2024
-
         while( array[ currentPos ].info != EMPTY &&
                array[ currentPos ].element != x )
         {
             collisions += 1;
-            currentPos += offset*offset;  // Compute ith probe
-            currentPos = currentPos % array.size();
+            std::cout << collisions << " ";
+            currentPos += offset;  // Compute ith probe
             offset += 1;
             if( currentPos >= array.size( ) )
                 currentPos -= array.size( );
@@ -146,9 +151,9 @@ class QuadraticHashTable
 
         return currentPos;
     }
-
-    void rehash( ) {
-        
+    
+    void rehash( )
+    {
         vector<HashEntry> oldArray = array;
 
             // Create new double-sized, empty table

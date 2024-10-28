@@ -1,12 +1,11 @@
-#ifndef QUADRATIC_PROBING_H
-#define QUADRATIC_PROBING_H
+#ifndef DOUBLE_PROBING_H
+#define DOUBLE_PROBING_H
 
 #include <vector>
 #include <algorithm>
 #include <functional>
 #include <string>
 #include <iostream>
-#include "linearProbing.h"
 
 using namespace std;
 
@@ -25,11 +24,11 @@ int nextPrime( int n );
 
 
 template <typename HashedObj>
-class QuadraticHashTable
+class DoubleHashTable
 {
   public:
-    explicit QuadraticHashTable( int size = 101 ) : array( nextPrime( size ) )
-      { makeEmpty( ); collisions = 0; }
+    explicit DoubleHashTable( int size = 101 ) : array( nextPrime( size ) )
+      { makeEmpty( ); collisions=0;}
 
     bool contains( const HashedObj & x ) const
     {
@@ -97,8 +96,7 @@ class QuadraticHashTable
         cout << " at " << currentPos << endl;
         return true;
     }
-
-    int getCollisions(){ return collisions; }
+    int getCollisions(){return collisions;}
 
     enum EntryType { ACTIVE, EMPTY, DELETED };
 
@@ -121,23 +119,30 @@ class QuadraticHashTable
 
     bool isActive( int currentPos ) const
       { return array[ currentPos ].info == ACTIVE; }
+    
+    size_t hash2(const HashedObj & x) const {
+        // 1 + (k mod (M-1))
+        static hash<HashedObj> hf;
+        return 1 + (hf ( x ) % (array.size() -1));
+    }
 
-    int findPos( const HashedObj & x ) 
-    {
-        int offset = 1;
-        int currentPos = myhash( x );
-        // function: (h1(k) + i^2) mod M
-        //            Quadratic probing
+    int findPos( const HashedObj & x ) {
+        // function: (h1(k) + i*h2(k)) mod M
+        //            h2(k) = 1 + (k mod (M-1))
+        //           double hash probing
         // Input: 
         // Output:
         // Author: Markus Bernal
         // Date: 10/28/2024
 
+        int offset = 1;
+        int currentPos = myhash( x );
+
         while( array[ currentPos ].info != EMPTY &&
                array[ currentPos ].element != x )
         {
             collisions += 1;
-            currentPos += offset*offset;  // Compute ith probe
+            currentPos += offset * hash2(x);  // Compute ith probe
             currentPos = currentPos % array.size();
             offset += 1;
             if( currentPos >= array.size( ) )
@@ -148,10 +153,8 @@ class QuadraticHashTable
     }
 
     void rehash( ) {
-        
         vector<HashEntry> oldArray = array;
-
-            // Create new double-sized, empty table
+        // Create new double-sized, empty table
         array.resize( nextPrime( 2 * oldArray.size( ) ) );
         for( auto & entry : array )
             entry.info = EMPTY;
