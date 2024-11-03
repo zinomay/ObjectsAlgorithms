@@ -30,19 +30,28 @@ class Inverted {
         std::set<int>* temp = &invertedMap.at( word );
         temp->insert( page );
       } else { // New word
-        invertedMap.insert(std::pair<std::string,int>(word,page));
+        std::set<int> temp ; 
+        temp.insert(page);
+        invertedMap.insert( {word, temp});
       }
     }
 
-    std::set<int> lookup( std::string word ){}; 
-    bool exists(){};
+    std::set<int> lookup( std::string word ){
+      std::set<int> temp;
+      return temp;
+    }; 
+    bool exists(){return false;}
 
     void print(){
       if( invertedMap.empty() ) {
         std::cout << "Inverted Index" << std::endl;
       } else{
-        for (auto word : invertedMap){
-          std::cout << word.first << word.second << std::endl;
+        for (const auto& word : invertedMap){
+          std::cout << word.first << " " ;
+          for( const auto& number : word.second){
+            std::cout << number <<  " " ; 
+          }
+          std::cout << std::endl;
         }
       }
 
