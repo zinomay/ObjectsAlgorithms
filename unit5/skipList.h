@@ -97,7 +97,20 @@ class skipList{
             }
         };
         void remove(int key){};
-        void print(){};
+        void print(){
+            skipListNode* current = head;
+            current_lvl = max_lvl;
+            for(int i=max_lvl; i>=0; i--){
+                if( current == nullptr ){
+                    std::cout << "nullptr" << std::endl;
+                    current = head;
+                    continue;
+                } else {
+                    current = current->next[current_lvl];
+                    std::cout << current->key << "->";
+                }
+            }
+        };
 };
 
 
