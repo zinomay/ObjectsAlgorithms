@@ -16,6 +16,7 @@
 #include<set>
 #include<string>
 #include<iostream>
+#include<fstream>
 
 class Inverted {
 
@@ -26,6 +27,9 @@ class Inverted {
 
     Inverted(){ std::cout << "New Inverted Index" << std::endl; }
     void insert( std::string word, int page ){
+      // function: inserts word and page
+      // input:
+      // output:
       if( invertedMap.count( word )){ // word exists
         std::set<int>* temp = &invertedMap.at( word );
         temp->insert( page );
@@ -37,12 +41,27 @@ class Inverted {
     }
 
     std::set<int> lookup( std::string word ){
+      // function: Searches for key in map and returns set
+      // input:
+      // output:
       std::set<int> temp;
       return temp;
     }; 
-    bool exists(){return false;}
+
+    bool exists( std::string word ){
+      // function: Check if key exists in map
+      // input:
+      // output:
+      if( invertedMap.count( word )){
+        return true;
+      }
+      return false;
+    }
 
     void print(){
+      // function: Searches for key in map and returns set
+      // input:
+      // output:
       if( invertedMap.empty() ) {
         std::cout << "Inverted Index" << std::endl;
       } else{
@@ -54,7 +73,25 @@ class Inverted {
           std::cout << std::endl;
         }
       }
+    }
 
+    void create_index( std::ofstream &oFile ){
+      // function: Searches for key in map and returns set
+      // input:
+      // output:
+      if( invertedMap.empty() ){
+        std::cout << "Index is empty" << std::endl;
+        return;
+      }
+      for( const auto& word : invertedMap ) {
+        oFile << word.first << " ";
+        std::set<int>::iterator last = word.second.end();
+        for( auto it = word.second.begin(); it != word.second.end()--; ++it){
+          oFile << *it << " ";
+        }
+        oFile << "\n";
+        
+      }
     }
 };
 
