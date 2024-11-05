@@ -16,6 +16,7 @@
 #define SKIPLIST_H
 #include<iostream>
 #include<vector>
+#include<random>
 
 template<class T>
 struct skipListNode {
@@ -32,6 +33,13 @@ class skipList{
         skipListNode<T>* head;
         int max_lvl;
         float probability; // probability for a node to be included at a higher level
+
+        float randomize(){
+            std::random_device rd;
+            std::mt19937 mt(rd());
+            std::uniform_real_distribution<float> dist(0.0, 1.0);
+            return dist(mt);
+        };
     public:
         skipList(){
             // initialize pointers
@@ -46,73 +54,67 @@ class skipList{
         };
 
         bool search(int key){ return false; }
+
         void insert(int key, T value){
             // generate a random level for new node
             // if generated value is less than threshold, add one (1) to level
             // repeat until threshold or max level is reached
+
+            // generate new node
+            skipListNode<T>* new_node = new skipListNode<T>();
+            bool randomize_lvl = true;
+            new_node -> level = 0; // initialize to lvl 0 
+            new_node -> key = key;
+            new_node -> value = value;
+
+            // generate random level for node
+            while( randomize_lvl ){
+                if( randomize() < probability ){
+                    new_node->level++;
+                } else { randomize_lvl = false; }
+            }            
+            // Initialize new node pointers
+            for(int i=0; i<=max_lvl; i++){
+                new_node->next.push_back(nullptr);
+            }
+
+
             if( head == nullptr ){
-                head = new skipListNode<T>();
-                for(int i=0; i<=max_lvl; i++){
-                    head->next.push_back(nullptr);
+                head = new_node;
+                return;
+            } 
+
+
+            // insert at beginning of list
+            if(head->key > key){
+                for(int i=0; i<=new_node->level;i++){
+                    new_node->next[i] = head;
                 }
-                head ->key = key;
-                head->level = max_lvl; // To do: add random level
-            } else {
-                // begin at beginning of list
-                skipListNode<T>* current = head;
-                skipListNode<T>* new_node = new skipListNode<T>();
-                new_node -> level = max_lvl; // To do: generate new level
-                new_node -> key = key;
-                for(int i=0; i<=max_lvl; i++){
-                    new_node->next.push_back(nullptr);
-                }
-                int current_lvl = new_node->level; 
-                // traverse skip list
-                while(current_lvl >=0 && current != nullptr){
-                    // key is great than current
-                    std::cout << "insert" << std::endl;
-                    if( current->key < key ){
-                        // check next node
-                        std::cout << "greater" << std::endl;
-                        if( current->next[current_lvl] != nullptr ){
-                            std::cout << "next" << std::endl;
-                            if(current->next[current_lvl]->key < key){
-                                current = current->next[current_lvl];
-                            } else{ 
-                                if( current_lvl == 0){
-                                    for(int i=0; i<= new_node->level; i++){
-                                        std::cout << i << std::endl;
-                                        new_node->next[i] = current->next[i];
-                                        current->next[i] = new_node;
-                                    }
-                                }
-                                current_lvl--; 
-                            }
-                        } else {
-                            std::cout << "else" << std::endl;
-                            if(current_lvl == 0){
-                                for(int i=0; i<= new_node->level; i++){
-                                    std::cout << i << std::endl;
-                                    new_node->next[i] = current->next[i];
-                                    current->next[i] = new_node;
-                                }
-                            } 
-                            std::cout << current_lvl << std::endl;
-                            current_lvl--; // move to next level
-                        }
+                head = new_node;
+                return;
+            }
+            skipListNode<T>* current = head;
+            int current_lvl = head->level; 
+            // traverse skip list
+            while(current_lvl >=0 ){
+                if( current->next[current_lvl] != nullptr){
+                    if( current->next[current_lvl]->key < key ){
+                        current = current->next[current_lvl];
                     } else {
-                        std::cout << "less equal" << std::endl;
                         if( current_lvl == 0 ){
-                            // create new node
-                            // update pointers
-                            for(int i=0; i <= new_node->level; i++){
-                                std::cout << "else" << i << std::endl;
-                                new_node->next[i] = current->next[i]; // connect new node to next node
+                            for( int i=0; i<=new_node->level; i++ ){
+                                new_node->next[i] = current->next[i];
                                 current->next[i] = new_node;
                             }
-                        } 
-                        current_lvl--; // decrement level
+                        }
+                        current_lvl--;
                     }
+                } else { // insert at end of list
+                    for(int i=0; i<=new_node->level; i++){
+                        new_node->next[i] = current->next[i];
+                        current->next[i] = new_node;
+                    }
+                    return;
                 }
             }
         };
@@ -120,16 +122,18 @@ class skipList{
         void print(){
             skipListNode<T>* current = head;
             int current_lvl = max_lvl;
-            std::cout << max_lvl << " nullptr -> ";
+            std::cout << max_lvl << " inf- -> ";
             int i =max_lvl;
             while(i >= 0){
                 if( current == nullptr ){
-                    std::cout << "nullptr" << std::endl;
-                    if( i != 0) {std::cout << i-1 << " nullptr -> ";}
+                    std::cout << "inf+" << std::endl;
+                    if( i != 0) {std::cout << i-1 << " inf- -> ";}
                     current = head;
-                    i--;
+                    i--; // decrement level
                 } else {
-                    std::cout << current->key << " -> ";
+                    if( current->level >= i ){
+                        std::cout << current->key << " -> ";
+                    } 
                     current = current->next.at(i);
                 }
             }
