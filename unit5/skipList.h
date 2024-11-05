@@ -38,7 +38,8 @@ class skipList{
             std::random_device rd;
             std::mt19937 mt(rd());
             std::uniform_real_distribution<float> dist(0.0, 1.0);
-            return dist(mt);
+            float random = dist(mt);
+            return random;
         };
     public:
         skipList(){
@@ -53,7 +54,24 @@ class skipList{
             head = nullptr ;
         };
 
-        bool search(int key){ return false; }
+        bool search( int key ){ 
+            skipListNode<T>* current = head;
+            int current_lvl = head->level;
+            while( current != nullptr  && current_lvl >= 0){
+                if( current->next[current_lvl] != nullptr ){
+                    if( current->key == key ){
+                        return true;
+                    }
+                    if(current->next[current_lvl]->key == key){
+                        return true;
+                    }
+                    current = current->next[current_lvl];
+                } else {
+                    current_lvl--;
+                }
+            }
+            return false; 
+        }
 
         void insert(int key, T value){
             // generate a random level for new node
@@ -118,7 +136,35 @@ class skipList{
                 }
             }
         };
-        void remove(int key){};
+        void remove(int key){
+            skipListNode<T>* current = head;
+            int current_lvl = head->level;
+            if( head->key == key ){
+                current = head->next[0];
+                delete head;
+                head = current;
+                return;
+            }
+            skipListNode<T>* update = nullptr;
+
+            for(int i=max_lvl; i>=0; i--) {
+                if( current->next[i] != nullptr ){
+                    while(current->next[i]->key < key ){
+                        current = current->next[i];
+                    }
+                }
+                update = current;
+            }
+            current = current->next[0];
+            if( current->key == key ){
+                for(int i=0; i<=current->level; i++){
+                    if(update->next[i] != current){ break; }
+                    update->next[i] = current->next[i];
+                }
+                delete current;
+                current = nullptr;
+            }
+        };
         void print(){
             skipListNode<T>* current = head;
             int current_lvl = max_lvl;
